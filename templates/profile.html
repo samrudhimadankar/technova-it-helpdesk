@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Profile | TechNova{% endblock %}
+{% block content %}
+<h1>My profile</h1>
+<div class="detail">
+  <section class="card">
+    <h2>Details</h2>
+    <form method="post" class="form" novalidate>
+      <input type="hidden" name="action" value="details">
+      <label>Full name <input name="name" id="p-name" value="{{ g.user.name }}"></label>
+      <label>Email <input value="{{ g.user.email }}" disabled></label>
+      <label>Department <input name="department" id="p-dept" value="{{ g.user.department or '' }}"></label>
+      <button class="btn primary" id="save-profile">Save changes</button>
+    </form>
+  </section>
+  <section class="card">
+    <h2>Change password</h2>
+    <form method="post" class="form" novalidate>
+      <input type="hidden" name="action" value="password">
+      <label>Current password <input type="password" name="current" id="cur-pw"></label>
+      <label>New password <input type="password" name="new" id="new-pw"></label>
+      <label>Confirm new password <input type="password" name="confirm" id="conf-pw"></label>
+      <button class="btn" id="change-pw">Change password</button>
+    </form>
+    <dl class="mt">
+      <dt>Role</dt><dd><span class="role role-{{ g.user.role }}">{{ g.user.role }}</span></dd>
+      <dt>Tickets raised</dt><dd>{{ stats.raised }}</dd>
+      <dt>Member since</dt><dd>{{ g.user.created_at|ist }}</dd>
+    </dl>
+  </section>
+</div>
+{% endblock %}

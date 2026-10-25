@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  <h1>Dashboard</h1>
+  <a class="btn primary" href="{{ url_for('new_ticket') }}">+ New Ticket</a>
+</div>
+<p class="muted">
+  {% if g.user.role == 'admin' %}Showing all tickets in the system.
+  {% elif g.user.role == 'agent' %}Showing tickets assigned to you.
+  {% else %}Showing tickets you have raised.{% endif %}
+</p>
+<div class="stats">
+  <div class="stat"><span>{{ total }}</span>Total</div>
+  {% for s, c in counts.items() %}
+  <a class="stat st-{{ s|replace(' ', '')|lower }}" href="{{ url_for('tickets', status=s) }}"><span>{{ c }}</span>{{ s }}</a>
+  {% endfor %}
+</div>
+<h2>Recently updated</h2>
+{% if recent %}
+<table class="grid">
+  <thead><tr><th>Ticket</th><th>Title</th><th>Priority</th><th>Status</th><th>Assigned to</th></tr></thead>
+  <tbody>
+  {% for t in recent %}
+  <tr>
+    <td><a href="{{ url_for('ticket_detail', ticket_id=t.id) }}">{{ t.id|tno }}</a></td>
+    <td>{{ t.title }}</td>
+    <td><span class="pri pri-{{ t.priority|lower }}">{{ t.priority }}</span></td>
+    <td><span class="badge st-{{ t.status|replace(' ', '')|lower }}">{{ t.status }}</span></td>
+    <td>{{ t.assignee_name or 'Unassigned' }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="empty">No tickets yet.</p>
+{% endif %}
+{% endblock %}

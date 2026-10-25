@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Tickets | TechNova{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Tickets</h1>
+  <a class="btn primary" href="{{ url_for('new_ticket') }}">+ New Ticket</a>
+</div>
+<form class="filters" method="get" id="filter-form">
+  <input name="q" id="q" placeholder="Search title, description or TKT-0001" value="{{ q }}">
+  <select name="status" id="f-status"><option value="">All statuses</option>
+    {% for s in statuses %}<option {{ 'selected' if s == status }}>{{ s }}</option>{% endfor %}</select>
+  <select name="priority" id="f-priority"><option value="">All priorities</option>
+    {% for p in priorities %}<option {{ 'selected' if p == priority }}>{{ p }}</option>{% endfor %}</select>
+  <select name="category" id="f-category"><option value="">All categories</option>
+    {% for c in categories %}<option {{ 'selected' if c == category }}>{{ c }}</option>{% endfor %}</select>
+  <button class="btn" id="filter-btn">Apply</button>
+  <a class="btn ghost" href="{{ url_for('tickets') }}">Clear</a>
+</form>
+<p class="muted" id="result-count">{{ tickets|length }} ticket(s) found</p>
+{% if tickets %}
+<table class="grid">
+  <thead><tr><th>Ticket</th><th>Title</th><th>Category</th><th>Priority</th><th>Status</th><th>Raised by</th><th>Assigned to</th><th>Created</th></tr></thead>
+  <tbody>
+  {% for t in tickets %}
+  <tr>
+    <td><a href="{{ url_for('ticket_detail', ticket_id=t.id) }}">{{ t.id|tno }}</a></td>
+    <td>{{ t.title }}</td>
+    <td>{{ t.category }}</td>
+    <td><span class="pri pri-{{ t.priority|lower }}">{{ t.priority }}</span></td>
+    <td><span class="badge st-{{ t.status|replace(' ', '')|lower }}">{{ t.status }}</span></td>
+    <td>{{ t.creator_name }}</td>
+    <td>{{ t.assignee_name or 'Unassigned' }}</td>
+    <td>{{ t.created_at|ist }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="empty">No tickets match your search.</p>
+{% endif %}
+{% endblock %}

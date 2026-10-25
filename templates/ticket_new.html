@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}New Ticket | TechNova{% endblock %}
+{% block content %}
+<h1>Raise a support ticket</h1>
+<form method="post" class="card form" novalidate>
+  <label>Title <input name="title" id="title" value="{{ form.get('title', '') }}" placeholder="Short summary of the problem"></label>
+  <small class="muted">5 to 100 characters</small>
+  <label>Description <textarea name="description" id="description" rows="6" placeholder="What happened, since when, any error message...">{{ form.get('description', '') }}</textarea></label>
+  <small class="muted">10 to 1000 characters</small>
+  <div class="row">
+    <label>Category
+      <select name="category" id="category"><option value="">Select...</option>
+      {% for c in categories %}<option {{ 'selected' if form.get('category') == c }}>{{ c }}</option>{% endfor %}</select>
+    </label>
+    <label>Priority
+      <select name="priority" id="priority"><option value="">Select...</option>
+      {% for p in priorities %}<option {{ 'selected' if form.get('priority') == p }}>{{ p }}</option>{% endfor %}</select>
+    </label>
+  </div>
+  <button class="btn primary" id="submit-ticket">Submit ticket</button>
+</form>
+{% endblock %}

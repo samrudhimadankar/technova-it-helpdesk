@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}{{ t.id|tno }} | TechNova{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('tickets') }}">&larr; All tickets</a></p>
+<div class="page-head">
+  <h1><span class="muted">{{ t.id|tno }}</span> {{ t.title }}</h1>
+  <span class="badge big st-{{ t.status|replace(' ', '')|lower }}" id="ticket-status">{{ t.status }}</span>
+</div>
+<div class="detail">
+  <section class="card">
+    <h2>Description</h2>
+    <p class="pre">{{ t.description }}</p>
+    {% if t.resolution_note %}
+    <h2>Resolution</h2>
+    <p class="pre resolution">{{ t.resolution_note }}</p>
+    {% endif %}
+
+    <h2>Comments</h2>
+    {% for c in comments %}
+      <div class="comment"><b>{{ c.name }}</b> <span class="role role-{{ c.role }}">{{ c.role }}</span>
+        <span class="muted">{{ c.created_at|ist }}</span><p class="pre">{{ c.body }}</p></div>
+    {% else %}<p class="muted">No comments yet.</p>{% endfor %}
+    {% if t.status != 'Closed' %}
+    <form method="post" action="{{ url_for('add_comment', ticket_id=t.id) }}" class="form">
+      <textarea name="body" id="comment-body" rows="3" placeholder="Add a comment"></textarea>
+      <button class="btn" id="comment-btn">Post comment</button>
+    </form>
+    {% endif %}
+  </section>
+
+  <aside class="card side">
+    <dl>
+      <dt>Category</dt><dd>{{ t.category }}</dd>
+      <dt>Priority</dt><dd><span class="pri pri-{{ t.priority|lower }}" id="ticket-priority">{{ t.priority }}</span></dd>
+      <dt>Raised by</dt><dd>{{ t.creator_name }}</dd>
+      <dt>Assigned to</dt><dd id="ticket-assignee">{{ t.assignee_name or 'Unassigned' }}</dd>
+      <dt>Created</dt><dd>{{ t.created_at|ist }}</dd>
+      <dt>Last updated</dt><dd>{{ t.updated_at|ist }}</dd>
+      {% if t.closed_at %}<dt>Closed</dt><dd>{{ t.closed_at|ist }}</dd>{% endif %}
+    </dl>
+
+    {% if can_assign %}
+    <form method="post" action="{{ url_for('assign_ticket', ticket_id=t.id) }}" class="form">
+      <label>Assign to agent
+        <select name="agent_id" id="agent-select"><option value="">Select agent...</option>
+        {% for a in agents %}<option value="{{ a.id }}" {{ 'selected' if a.id == t.assigned_to }}>{{ a.name }}</option>{% endfor %}</select>
+      </label>
+      <button class="btn" id="assign-btn">Assign</button>
+    </form>
+    {% endif %}
+
+    {% if can_edit_priority %}
+    <form method="post" action="{{ url_for('update_priority', ticket_id=t.id) }}" class="form">
+      <label>Change priority
+        <select name="priority" id="priority-select">
+        {% for p in priorities %}<option {{ 'selected' if p == t.priority }}>{{ p }}</option>{% endfor %}</select>
+      </label>
+      <button class="btn" id="priority-btn">Update priority</button>
+    </form>
+    {% endif %}
+
+    {% if next_statuses %}
+    <h3>Update status</h3>
+    {% for s in next_statuses %}
+      <form method="post" action="{{ url_for('change_status', ticket_id=t.id) }}" class="form">
+        <input type="hidden" name="status" value="{{ s }}">
+        {% if s == 'Resolved' %}
+          <textarea name="note" id="resolution-note" rows="3" placeholder="How was it fixed? (min 10 characters)"></textarea>
+        {% endif %}
+        <button class="btn {{ 'primary' if s in ('Resolved', 'Closed') else '' }}" id="status-{{ s|replace(' ', '')|lower }}">
+          {% if t.status == 'Resolved' and s == 'In Progress' %}Reopen ticket
+          {% elif t.status == 'Open' and s == 'Closed' %}Cancel ticket
+          {% elif s == 'In Progress' %}Start work
+          {% elif s == 'Resolved' %}Mark resolved
+          {% else %}Close ticket{% endif %}
+        </button>
+      </form>
+    {% endfor %}
+    {% endif %}
+
+    <h3>Activity</h3>
+    <ul class="activity">
+      {% for a in activity %}<li><b>{{ a.name }}</b>: {{ a.action }}<br><span class="muted">{{ a.created_at|ist }}</span></li>{% endfor %}
+    </ul>
+  </aside>
+</div>
+{% endblock %}

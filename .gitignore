@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+venv/
+.venv/
+technova.db
+.coverage
+coverage_html/
+.pytest_cache/
+automation-testing/target/
+.idea/
+*.iml

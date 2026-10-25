@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Login | TechNova{% endblock %}
+{% block content %}
+<div class="auth-card">
+  <h1>Log in</h1>
+  <p class="muted">Raise and track IT support tickets.</p>
+  <form method="post" novalidate>
+    <label>Email <input type="email" name="email" id="email" value="{{ email }}"></label>
+    <label>Password <input type="password" name="password" id="password"></label>
+    <button class="btn primary" id="login-btn">Log in</button>
+  </form>
+  <p class="muted">New here? <a href="{{ url_for('register') }}">Create an account</a></p>
+</div>
+{% endblock %}

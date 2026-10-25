@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}TechNova IT Helpdesk{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="{{ url_for('index') }}"><span class="logo">TN</span> TechNova IT Helpdesk</a>
+  {% if g.user %}
+  <nav>
+    <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' }}">Dashboard</a>
+    <a href="{{ url_for('tickets') }}" class="{{ 'active' if request.endpoint == 'tickets' }}">Tickets</a>
+    <a href="{{ url_for('new_ticket') }}" class="{{ 'active' if request.endpoint == 'new_ticket' }}" id="nav-new">+ New Ticket</a>
+    <a href="{{ url_for('profile') }}" class="{{ 'active' if request.endpoint == 'profile' }}">{{ g.user.name }} <span class="role role-{{ g.user.role }}">{{ g.user.role }}</span></a>
+    <form method="post" action="{{ url_for('logout') }}" class="inline"><button class="link" id="logout-btn">Logout</button></form>
+  </nav>
+  {% endif %}
+</header>
+<main class="container">
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for cat, m in msgs %}<div class="flash flash-{{ cat }}">{{ m }}</div>{% endfor %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<footer>TechNova IT Helpdesk &middot; PBL Software Lab</footer>
+</body>
+</html>

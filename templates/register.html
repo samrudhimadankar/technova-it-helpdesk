@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Register | TechNova{% endblock %}
+{% block content %}
+<div class="auth-card">
+  <h1>Create account</h1>
+  <form method="post" novalidate>
+    <label>Full name <input name="name" id="name" value="{{ form.get('name', '') }}"></label>
+    <label>Email <input type="email" name="email" id="email" value="{{ form.get('email', '') }}"></label>
+    <label>Department <span class="muted">(optional, max 50)</span> <input name="department" id="department" value="{{ form.get('department', '') }}"></label>
+    <label>Password <input type="password" name="password" id="password"></label>
+    <small class="muted">8 to 20 characters, at least one letter and one number.</small>
+    <label>Confirm password <input type="password" name="confirm" id="confirm"></label>
+    <button class="btn primary" id="register-btn">Register</button>
+  </form>
+  <p class="muted">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+</div>
+{% endblock %}
