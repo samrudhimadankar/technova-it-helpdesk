@@ -4,7 +4,7 @@ An IT support ticket system built for our Software Engineering PBL. Employees ra
 
 **Live site:** https://samrudhi.pythonanywhere.com
 
-![Dashboard](docs/08_dashboard_admin.png)
+
 
 ## Features
 
