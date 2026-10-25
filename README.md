@@ -64,7 +64,7 @@ Open http://127.0.0.1:5000
 
 ## Testing
 
-**Black-box**: 53 test cases in [docs/TechNova_Test_Cases.xlsx](TechNova_Test_Cases_BLACKBOX_WHITEBOX_TESTING) using Equivalence Class Partitioning, Boundary Value Analysis and state transition testing. 4 bugs found on v1.0, all fixed in v1.1, 53/53 pass. Selenium script `automation-testing/.../First.java` runs 17 of these on the live site.
+**Black-box**: 53 test cases in TechNova_Test_Cases_BLACKBOX_WHITEBOX_TESTING using Equivalence Class Partitioning, Boundary Value Analysis and state transition testing. 4 bugs found on v1.0, all fixed in v1.1, 53/53 pass. Selenium script `automation-testing/.../First.java` runs 17 of these on the live site.
 
 **White-box**: control flow graphs and cyclomatic complexity for `validate_password` (V(G) = 6) and `can_change_status` (V(G) = 5), one test per basis path.
 
